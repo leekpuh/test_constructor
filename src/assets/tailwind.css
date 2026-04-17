@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility main-container {
+  width: 90vw;
+  max-width: 2560px;
+  margin-inline: auto;
+}

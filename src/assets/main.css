@@ -1,21 +1,38 @@
-@import './base.css';
+@import "./base.css";
+@import "./tailwind.css";
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
 }
 
-a,
+header {
+  top: 0;
+  position: sticky;
+  z-index: 99;
+}
+
+main {
+  min-height: calc(100vh - 72.8px);
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+
+}
+
+
+
+button:hover {
+  cursor: pointer;
+}
+
+/* a,
 .green {
   text-decoration: none;
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
   padding: 3px;
-}
+} */
 
-@media (hover: hover) {
+/* @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
   }
@@ -31,5 +48,4 @@ a,
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
-  }
-}
+  } */
