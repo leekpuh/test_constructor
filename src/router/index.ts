@@ -1,4 +1,5 @@
-import BlankFormView from '@/views/BlankFormView.vue/BlankFormView.vue'
+
+import FormView from '@/views/Form/FormView.vue'
 import MainView from '@/views/MainView/MainView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -11,9 +12,9 @@ const router = createRouter({
       component: MainView,
     },
     {
-      path: '/blank-form',
-      name: 'blank-form',
-      component: BlankFormView,
+      path: '/form/:id',
+      name: 'form',
+      component: FormView,
     },
     
   ],
