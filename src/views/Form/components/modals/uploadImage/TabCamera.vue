@@ -30,7 +30,7 @@ const { videoInputs: cameras } = useDevicesList({
 const video = ref<HTMLVideoElement | null>(null);
 const photo = ref<File>();
 const photoUrl = ref("");
-
+const flash = ref(false);
 
 const { stream, enabled } = useUserMedia({
   constraints: reactive({
@@ -55,7 +55,10 @@ watchEffect(() => {
 
 const takePhoto = () => {
   if (!video.value) return;
-
+  flash.value = true;
+  setTimeout(() => {
+    flash.value = false;
+  }, 150);
   const canvas = document.createElement("canvas");
 
   canvas.width = video.value.videoWidth;
@@ -66,39 +69,41 @@ const takePhoto = () => {
 
   ctx.drawImage(video.value, 0, 0);
 
-canvas.toBlob((blob) => {
-  if (!blob) return;
+  canvas.toBlob((blob) => {
+    if (!blob) return;
 
-  const file = new File([blob], "photo.png", {
-    type: "image/png",
-  });
+    const file = new File([blob], "photo.png", {
+      type: "image/png",
+    });
 
-  photo.value = file;
-  photoUrl.value = URL.createObjectURL(file);
-}, "image/png");
+    photo.value = file;
+    photoUrl.value = URL.createObjectURL(file);
+  }, "image/png");
 
-  console.log(photo)
+  console.log(photo);
 };
 
-const formsStore = useFormsStore()
+const formsStore = useFormsStore();
 
 const handleAddImage = () => {
   if (!photo.value) return;
   formsStore.addImage(photo.value, "");
   emit("closeModal");
 };
-
 </script>
 <template>
   <div class="flex h-85">
     <div class="flex items-center flex-col gap-2 w-1/2 pt-4">
-      <video
-        ref="video"
-        muted
-        autoplay
-        playsinline
-        class="max-h-60 w-fit rounded-lg "
-      />
+      <div class="relative">
+        <video
+          ref="video"
+          muted
+          autoplay
+          playsinline
+          class="max-h-60 w-fit rounded-lg"
+        />
+        <div v-if="flash" class="absolute bg-white inset-0 rounded-lg blur-xl opacity-50"></div>
+      </div>
 
       <button
         @click="takePhoto"
@@ -107,12 +112,18 @@ const handleAddImage = () => {
         <OhVueIcon name="bi-camera" scale="1.5" class="text-slate-400" />
       </button>
     </div>
-    <div class="w-1/2 h-auto bg-slate-200 flex justify-center rounded-l-lg gap-2 pt-4">
-      <img v-if="photo" :src="photoUrl" alt="Фото" class="h-60 w-fit rounded-lg border-2 border-slate-800" />
-
+    <div
+      class="w-1/2 h-auto bg-slate-200 flex justify-center rounded-l-lg gap-2 pt-4"
+    >
+      <img
+        v-if="photo"
+        :src="photoUrl"
+        alt="Фото"
+        class="h-60 w-fit rounded-lg border-2 border-slate-300 p-1 bg-white"
+      />
     </div>
   </div>
   <div v-if="photo" class="w-full flex justify-end pr-5">
-      <Button @click="handleAddImage"> Вставить изображение </Button>
-    </div>
+    <Button @click="handleAddImage"> Вставить изображение </Button>
+  </div>
 </template>
