@@ -11,13 +11,11 @@ import QuestionTypeDropdown from "./QuestionTypeDropdown.vue";
 import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { questionTypes } from "@/constants/questionTypes";
-import type { QuestionType } from "@/stores/forms";
+import type { IQuestionBlock } from "@/stores/forms";
 
 addIcons(HiChevronDown, MdRadiobuttonchecked, HiPlus, BiStar);
 const props = defineProps<{
-  id: string;
-  title: string;
-  type: QuestionType;
+  question: IQuestionBlock
 }>();
 
 const isDropdownOpen = ref(false);
@@ -30,9 +28,10 @@ onClickOutside(questionTypeTarget, () => {
 </script>
 
 <template>
+  
   <div class="bg-white w-[50vw] h-fit py-4 px-6 flex flex-col gap-4 ">
     <input
-      :value="title"
+      :value="props.question.title"
       class="border-b-2 border-slate-200 w-full outline-0 text-xl p-2"
     />
 
@@ -42,13 +41,13 @@ onClickOutside(questionTypeTarget, () => {
     >
       <div class="flex items-center w-full gap-4 px-2">
         <OhVueIcon
-          :name="questionTypes[props.type].icon"
+          :name="questionTypes[props.question.questionType].icon"
           scale="1"
           class="text-slate-400 cursor-pointer"
         />
 
-        <p>{{ questionTypes[props.type].label }}</p>
-      </div>
+        <p>{{ questionTypes[props.question.questionType].label }}</p>
+      </div>  
       <OhVueIcon
         name="hi-chevron-down"
         scale="1"
@@ -61,22 +60,22 @@ onClickOutside(questionTypeTarget, () => {
       class="absolute mt-15 z-97"
     >
       <QuestionTypeDropdown
-        :questionId="id"
+        :questionId="props.question.id"
         @closeDropdown="isDropdownOpen = false"
       />
     </div>
     <div class="py-2">
       <Options
-        v-if="['single', 'multiple', 'dropdown'].includes(props.type)"
-        :questionId="id"
+        v-if="['single', 'multiple', 'dropdown'].includes(props.question.questionType)"
+        :questionId="props.question.id"
       />
       <textarea
-        v-else-if="props.type === 'text'"
+        v-else-if="props.question.questionType === 'text'"
         disabled
         placeholder="Ответ"
         class="border border-slate-300 rounded-lg p-2 h-12 w-full resize-none"
       />
-      <div v-else-if="props.type === 'rating'" class="flex gap-2">
+      <div v-else-if="props.question.questionType === 'rating'" class="flex gap-2">
         <OhVueIcon name="bi-star" scale="1.5" class="text-slate-400 mb-2" />
         <OhVueIcon name="bi-star" scale="1.5" class="text-slate-400 mb-2" />
         <OhVueIcon name="bi-star" scale="1.5" class="text-slate-400 mb-2" />

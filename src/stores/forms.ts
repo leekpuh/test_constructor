@@ -2,15 +2,6 @@ import { nanoid } from "nanoid";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-interface IForm {
-  id: string;
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  questions: IQuestion[];
-}
-
 export type QuestionType =
   | "single"
   | "multiple"
@@ -18,14 +9,45 @@ export type QuestionType =
   | "text"
   | "rating";
 
-interface IQuestion {
+interface IForm {
   id: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  blocks: FormBlock[];
+}
+
+export interface IQuestionBlock {
+  id: string;
+  blockType: "question";
   title: string;
   questionType: QuestionType;
   options: IOption[];
 }
 
-interface IOption {
+export interface IDescriptionBlock {
+  id: string;
+  blockType: "description";
+  text: string;
+}
+
+export interface IImageBlock {
+  id: string;
+  blockType: "image";
+  imageFile: File | null;
+  imageUrl: string | null;
+}
+
+export interface IVideoBlock {
+  id: string;
+  blockType: "video";
+  videoUrl: string;
+}
+
+type FormBlock = IQuestionBlock | IDescriptionBlock | IImageBlock | IVideoBlock;
+
+export interface IOption {
   id: string;
   optionText: string;
 }
@@ -40,11 +62,20 @@ export const useFormsStore = defineStore("formsStore", () => {
 
   const defineTitle = () => {
     const numOfBlankTitles = forms.value.filter((form) =>
-      form.title.includes("Новая форма"),
+      form.title.includes("Новый тест"),
     ).length;
     return numOfBlankTitles === 0
-      ? "Новая форма"
-      : `Новая форма (${numOfBlankTitles})`;
+      ? "Новый тест"
+      : `Новый тест (${numOfBlankTitles})`;
+  };
+
+  const formatedDate = () => {
+    const date = new Date();
+    return date.toLocaleDateString("ru-RU", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   };
 
   function addForm() {
@@ -52,51 +83,86 @@ export const useFormsStore = defineStore("formsStore", () => {
       id: nanoid(),
       title: defineTitle(),
       description: "",
-      createdAt: new Date().toISOString(),
+      createdAt: formatedDate(),
       updatedAt: new Date().toISOString(),
-      questions: [],
+      blocks: [],
     };
     forms.value.push(newForm);
     currentFormId.value = newForm.id;
-    addQuestion();
+    addQuestion("single");
     return newForm;
   }
 
-  function addQuestion() {
+  //question functions
+
+  function addQuestion(type: QuestionType) {
     if (!currentForm.value) return;
 
-    const newQuestion: IQuestion = {
+    const question: IQuestionBlock = {
       id: nanoid(),
+      blockType: "question",
       title: "Новый вопрос",
-      questionType: "single",
+      questionType: type,
       options: [],
     };
-    currentForm.value.questions.push(newQuestion);
-    addOption(newQuestion.id);
-    return newQuestion;
+
+    currentForm.value.blocks.push(question);
+    addOption(question.id);
   }
 
+  //option functions
+
   function addOption(questionid: string) {
-    const question = currentForm.value?.questions.find(
-      (q) => q.id === questionid,
-    );
+    const question = currentForm.value?.blocks.find(
+      (b) => b.blockType === "question" && b.id === questionid,
+    ) as IQuestionBlock;
 
     const newOption: IOption = {
       id: nanoid(),
       optionText: "",
     };
+
     question?.options.push(newOption);
   }
 
   function changeQuestionType(questionid: string, newType: QuestionType) {
-    const question = currentForm.value?.questions.find(
-      (q) => q.id === questionid,
-    );
+    const question = currentForm.value?.blocks.find(
+      (b) => b.blockType === "question" && b.id === questionid,
+    ) as IQuestionBlock;
 
     if (!question) return;
 
     question.questionType = newType;
   }
+
+  //description functions
+
+  function addDescription() {
+    if (!currentForm.value) return
+
+    const newDescription: IDescriptionBlock = {
+      id: nanoid(),
+      blockType: "description",
+      text: "",
+    };
+
+    currentForm.value.blocks.push(newDescription)
+  }
+  function addImage(file: File | null, url: string | null) {
+    if (!currentForm.value) return
+
+    const newImage: IImageBlock = {
+      id: nanoid(),
+      blockType: 'image',
+      imageFile: file,
+      imageUrl: url,
+    }
+
+    currentForm.value.blocks.push(newImage)
+  }
+
+  //picture functions
+
 
   return {
     forms,
@@ -106,5 +172,7 @@ export const useFormsStore = defineStore("formsStore", () => {
     addQuestion,
     addOption,
     changeQuestionType,
+    addDescription,
+    addImage
   };
 });

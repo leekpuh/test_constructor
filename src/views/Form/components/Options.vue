@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useFormsStore } from "@/stores/forms";
+import { useFormsStore, type IQuestionBlock } from "@/stores/forms";
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { HiSolidPlus } from "oh-vue-icons/icons";
 import { computed } from "vue";
@@ -11,15 +11,12 @@ const props = defineProps<{
 
 const formsStore = useFormsStore();
 const question = computed(() => {
-   const q = formsStore?.currentForm?.questions.find((q) => q.id === props.questionId);
-  if (!q) {
-    console.warn("Question not found:", props.questionId);
-  }
+  const block = formsStore?.currentForm?.blocks.find(
+    (b) => b.id === props.questionId && b.blockType === "question",
+  ) as IQuestionBlock;
 
-  return q;
-}
-
-);
+  return block;
+});
 const options = computed(() => question.value?.options || []);
 
 function handleAddOption(questionId: string) {
