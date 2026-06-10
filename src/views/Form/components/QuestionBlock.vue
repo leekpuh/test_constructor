@@ -12,6 +12,7 @@ import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { questionTypes } from "@/constants/questionTypes";
 import type { IQuestionBlock } from "@/stores/forms";
+import FormBlock from "./FormBlock.vue";
 
 addIcons(HiChevronDown, MdRadiobuttonchecked, HiPlus, BiStar);
 const props = defineProps<{
@@ -29,7 +30,7 @@ onClickOutside(questionTypeTarget, () => {
 
 <template>
   
-  <div class="bg-white w-[50vw] h-fit py-4 px-6 flex flex-col gap-4 ">
+  <FormBlock>
     <input
       :value="props.question.title"
       class="border-b-2 border-slate-200 w-full outline-0 text-xl p-2"
@@ -83,5 +84,5 @@ onClickOutside(questionTypeTarget, () => {
         <OhVueIcon name="bi-star" scale="1.5" class="text-slate-400 mb-2" />
       </div>
     </div>
-  </div>
+  </FormBlock>
 </template>

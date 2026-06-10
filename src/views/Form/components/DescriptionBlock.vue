@@ -1,13 +1,15 @@
 <script lang="ts" setup>
+import FormBlock from './FormBlock.vue';
+
 
 </script>
 
 <template>
-  <div class="bg-white w-[50vw] h-fit py-4 px-6 flex flex-col gap-4">
+  <FormBlock>
       <textarea
         placeholder="Описание"
         class="border border-slate-300 rounded-lg p-2 h-20 min-h-20 max-h-100 w-full"
       />
       
-  </div>
+  </FormBlock>
 </template>

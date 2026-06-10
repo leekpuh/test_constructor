@@ -45,7 +45,17 @@ export interface IVideoBlock {
   videoUrl: string;
 }
 
-type FormBlock = IQuestionBlock | IDescriptionBlock | IImageBlock | IVideoBlock;
+export interface IPageBreak {
+  id: string;
+  blockType: "pageBreak";
+}
+
+type FormBlock =
+  | IQuestionBlock
+  | IDescriptionBlock
+  | IImageBlock
+  | IVideoBlock
+  | IPageBreak;
 
 export interface IOption {
   id: string;
@@ -138,7 +148,7 @@ export const useFormsStore = defineStore("formsStore", () => {
   //description functions
 
   function addDescription() {
-    if (!currentForm.value) return
+    if (!currentForm.value) return;
 
     const newDescription: IDescriptionBlock = {
       id: nanoid(),
@@ -146,24 +156,47 @@ export const useFormsStore = defineStore("formsStore", () => {
       text: "",
     };
 
-    currentForm.value.blocks.push(newDescription)
+    currentForm.value.blocks.push(newDescription);
   }
+
+  //image functions
+
   function addImage(file: File | null, url: string | null) {
-    if (!currentForm.value) return
+    if (!currentForm.value) return;
 
     const newImage: IImageBlock = {
       id: nanoid(),
-      blockType: 'image',
+      blockType: "image",
       imageFile: file,
       imageUrl: url,
-    }
+    };
 
-    currentForm.value.blocks.push(newImage)
+    currentForm.value.blocks.push(newImage);
   }
 
-  //picture functions
+  //video functions
+  function addVideo(url: string) {
+    if (!currentForm.value) return;
 
+    const newVideo: IVideoBlock = {
+      id: nanoid(),
+      blockType: "video",
+      videoUrl: url,
+    };
 
+    currentForm.value.blocks.push(newVideo);
+  }
+
+  //page break
+
+  function breakPage() {
+    if (!currentForm.value) return;
+    const newPageBreak: IPageBreak = {
+      id: nanoid(),
+      blockType: "pageBreak",
+    };
+    currentForm.value.blocks.push(newPageBreak);
+  }
   return {
     forms,
     currentFormId,
@@ -173,6 +206,8 @@ export const useFormsStore = defineStore("formsStore", () => {
     addOption,
     changeQuestionType,
     addDescription,
-    addImage
+    addImage,
+    addVideo,
+    breakPage
   };
 });

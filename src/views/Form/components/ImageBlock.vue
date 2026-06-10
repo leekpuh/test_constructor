@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { type IImageBlock } from "@/stores/forms";
 import { onUnmounted } from "vue";
+import FormBlock from "./FormBlock.vue";
 
 const props = defineProps<{
   image: IImageBlock;
@@ -22,7 +23,7 @@ onUnmounted(() => {
 
 </script>
 <template>
-  <div class="bg-white w-[50vw] h-fit py-4 px-6 flex flex-col gap-4">
+  <FormBlock>
     <input
       placeholder="Заголовок"
       class="border-b-2 border-slate-200 w-full outline-0 text-xl p-2"
@@ -33,5 +34,5 @@ onUnmounted(() => {
         class="border border-slate-300 p-1 max-h-100 w-fit rounded-xl"
       />
     </div>
-  </div>
+  </FormBlock>
 </template>

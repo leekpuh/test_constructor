@@ -9,3 +9,10 @@
   max-width: 2560px;
   margin-inline: auto;
 }
+
+@utility noselect {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

@@ -69,7 +69,7 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
 </script>
 
 <template>
-  <div class="px-5">
+  <div class="px-5 pt-2">
     <div
       ref="dropZoneRef"
       class="h-85 flex-center flex-col gap-4 bg rounded-xl border-3 border-dashed border-slate-300"

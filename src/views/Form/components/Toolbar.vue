@@ -11,7 +11,8 @@ import {
   HiReply,
 } from "oh-vue-icons/icons";
 import { ref } from "vue";
-import UploadImageModal from "./modals/uploadImage/UploadImageModal.vue";
+import UploadModal from "./modals/UploadModal.vue";
+
 addIcons(
   HiPlusCircle,
   HiChatAlt,
@@ -21,11 +22,11 @@ addIcons(
   MdRemoveredeyeOutlined,
   HiReply,
 );
-
+type uploadModal = 'image' | 'video' | null
 const formsStore = useFormsStore();
 
-const isModalUploadImageOpen = ref(false);
-
+const isUploadModalOpen = ref(false);
+let uploadModalType: uploadModal = null;
 
 const handleAddQuestion = () => {
   formsStore.addQuestion("single");
@@ -35,9 +36,16 @@ const handleAddDescription = () => {
   formsStore.addDescription();
 };
 
-const handleUploadImage = () => {
-  isModalUploadImageOpen.value = true;
+const handleUpload = (type: uploadModal) => {
+  uploadModalType = type
+  isUploadModalOpen.value = true;
 };
+
+const handleBreakPage = () => {
+formsStore.breakPage()
+}
+
+
 
 const toolbarButtonsData = [
   {
@@ -51,15 +59,15 @@ const toolbarButtonsData = [
     icon: 'hi-chat-alt',
   },{
     title: 'Добавить изображение',
-    funcOnClick: handleUploadImage,
+    funcOnClick:() => handleUpload('image'),
     icon: 'oi-image',
   },{
     title: 'Добавить видео',
-    funcOnClick: () => {},
+    funcOnClick:() => handleUpload('video'),
     icon: 'oi-video',
   },{
     title: 'Добавить раздел',
-    funcOnClick: () => {},
+    funcOnClick: () => handleBreakPage(),
     icon: 'md-lineweight-round',
   },{
     title: 'Предпросмотр формы',
@@ -71,25 +79,28 @@ const toolbarButtonsData = [
     icon: 'hi-reply',
   },
 ]
-
 </script>
 <template>
-  <div class="h-fit w-fit p-5 bg-white shadow border border-slate-200">
+  <div class="h-fit w-fit p-5 bg-white shadow border border-slate-200 rounded-2xl">
     <ul class="flex flex-col gap-3">
-      <li v-for="el in toolbarButtonsData" :key="el.title" class="nth-last-[2]:border-t-3 nth-last-[2]:border-slate-200 nth-last-[2]:pt-2">
+      <li
+        v-for="el in toolbarButtonsData"
+        :key="el.title"
+        class="nth-last-[2]:border-t-3 nth-last-[2]:border-slate-200 nth-last-[2]:pt-2"
+      >
         <button :title="el.title" @click="el.funcOnClick">
           <OhVueIcon
             :name="el.icon"
             scale="1.5"
-            class="text-slate-400 hover:text-slate-600 cursor-pointer "
+            class="text-slate-400 hover:text-slate-600 cursor-pointer"
           />
         </button>
       </li>
     </ul>
-    <UploadImageModal
-      v-if="isModalUploadImageOpen"
-
-      @closeModal="isModalUploadImageOpen = false"
+    <UploadModal
+      v-if="isUploadModalOpen && uploadModalType"
+      :type="uploadModalType"
+      @closeModal="isUploadModalOpen = false"
     />
   </div>
 </template>
