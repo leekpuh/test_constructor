@@ -39,12 +39,13 @@ watchEffect(() => {
           <div
             class="bg-white w-[50vw] h-fit py-4 px-6 flex flex-col rounded-b-2xl"
           >
-            <input
-              :value="currentForm?.title"
+            <input v-if="currentForm"
+              v-model.trim="currentForm.title" 
               placeholder="Название теста"
               class="border-b-2 border-slate-200 w-full outline-0 text-2xl p-2"
             />
-            <input
+            <input v-if="currentForm"
+            v-model.trim="currentForm.description"
               placeholder="Описание"
               class="border-b-2 border-slate-200 w-full outline-0 p-2"
             />

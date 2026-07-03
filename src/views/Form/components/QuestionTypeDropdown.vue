@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { useFormsStore, type QuestionType } from "@/stores/forms";
+import { useFormsStore } from "@/stores/forms";
+import { type QuestionType } from "@/types/forms";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import {
   MdRadiobuttonchecked,

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type IImageBlock } from "@/stores/forms";
+import { type IImageBlock } from "@/types/forms";
 import { onUnmounted } from "vue";
 import FormBlock from "./FormBlock.vue";
 
@@ -26,6 +26,7 @@ onUnmounted(() => {
   <FormBlock>
     <input
       placeholder="Заголовок"
+      v-model="props.image.title"
       class="border-b-2 border-slate-200 w-full outline-0 text-xl p-2"
     />
     <div class="flex-center">

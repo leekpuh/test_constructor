@@ -1,4 +1,4 @@
-import type { QuestionType } from "@/stores/forms";
+import type { QuestionType } from "@/types/forms";
 
 export const questionTypes: Record<
   QuestionType,

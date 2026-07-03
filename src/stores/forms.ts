@@ -1,82 +1,38 @@
+import type {
+  IDescriptionBlock,
+  IForm,
+  IImageBlock,
+  IOption,
+  IPageBreak,
+  IQuestionBlock,
+  IVideoBlock,
+  QuestionType,
+} from "@/types/forms";
 import { nanoid } from "nanoid";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-export type QuestionType =
-  | "single"
-  | "multiple"
-  | "dropdown"
-  | "text"
-  | "rating";
-
-interface IForm {
-  id: string;
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  blocks: FormBlock[];
-}
-
-export interface IQuestionBlock {
-  id: string;
-  blockType: "question";
-  title: string;
-  questionType: QuestionType;
-  options: IOption[];
-}
-
-export interface IDescriptionBlock {
-  id: string;
-  blockType: "description";
-  text: string;
-}
-
-export interface IImageBlock {
-  id: string;
-  blockType: "image";
-  imageFile: File | null;
-  imageUrl: string | null;
-}
-
-export interface IVideoBlock {
-  id: string;
-  blockType: "video";
-  videoUrl: string;
-}
-
-export interface IPageBreak {
-  id: string;
-  blockType: "pageBreak";
-}
-
-type FormBlock =
-  | IQuestionBlock
-  | IDescriptionBlock
-  | IImageBlock
-  | IVideoBlock
-  | IPageBreak;
-
-export interface IOption {
-  id: string;
-  optionText: string;
-}
-
 export const useFormsStore = defineStore("formsStore", () => {
   const forms = ref<IForm[]>([]);
   const currentFormId = ref<string | null>(null);
+  const history = ref([]);
 
   const currentForm = computed(() => {
     return forms.value.find((form) => form.id === currentFormId.value);
   });
 
   const defineTitle = () => {
-    const numOfBlankTitles = forms.value.filter((form) =>
-      form.title.includes("Новый тест"),
-    ).length;
-    return numOfBlankTitles === 0
-      ? "Новый тест"
-      : `Новый тест (${numOfBlankTitles})`;
+    const blankTitles = forms.value.filter((form) =>
+      form.title.match(/^Новый тест( \((\d+)\))?$/),
+    );
+   if (blankTitles.length === 0) return "Новый тест"
+   const maxNum = blankTitles.reduce((max, form) => {
+    const match = form.title.match(/\((\d+)\)/)
+    if (!match) return max
+    const num = Number(match[1])
+    return num - 1 === max ? num : max
+   }, 0)
+    return `Новый тест (${maxNum + 1})`;
   };
 
   const formatedDate = () => {
@@ -111,7 +67,7 @@ export const useFormsStore = defineStore("formsStore", () => {
     const question: IQuestionBlock = {
       id: nanoid(),
       blockType: "question",
-      title: "Новый вопрос",
+      title: "",
       questionType: type,
       options: [],
     };
@@ -167,6 +123,7 @@ export const useFormsStore = defineStore("formsStore", () => {
     const newImage: IImageBlock = {
       id: nanoid(),
       blockType: "image",
+      title: "",
       imageFile: file,
       imageUrl: url,
     };
@@ -181,6 +138,7 @@ export const useFormsStore = defineStore("formsStore", () => {
     const newVideo: IVideoBlock = {
       id: nanoid(),
       blockType: "video",
+      title: "",
       videoUrl: url,
     };
 
@@ -197,6 +155,25 @@ export const useFormsStore = defineStore("formsStore", () => {
     };
     currentForm.value.blocks.push(newPageBreak);
   }
+
+  //history undo
+
+  function addToHistory() {}
+
+  //general func
+
+  // function changeBlockTitle(blockId: string, newTitle: string) {
+  //   const block = currentForm.value?.blocks.find((b) =>
+  //     b.id === blockId);
+  //   if (
+  //     block &&
+  //     (block.blockType === "question" ||
+  //       block.blockType === "image" ||
+  //       block.blockType === "video")
+  //   )
+  //     block.title = newTitle;
+  // }
+
   return {
     forms,
     currentFormId,
@@ -208,6 +185,6 @@ export const useFormsStore = defineStore("formsStore", () => {
     addDescription,
     addImage,
     addVideo,
-    breakPage
+    breakPage,
   };
 });

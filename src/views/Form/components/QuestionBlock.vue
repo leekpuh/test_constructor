@@ -11,7 +11,7 @@ import QuestionTypeDropdown from "./QuestionTypeDropdown.vue";
 import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { questionTypes } from "@/constants/questionTypes";
-import type { IQuestionBlock } from "@/stores/forms";
+import type { IQuestionBlock } from "@/types/forms";
 import FormBlock from "./FormBlock.vue";
 
 addIcons(HiChevronDown, MdRadiobuttonchecked, HiPlus, BiStar);
@@ -32,7 +32,8 @@ onClickOutside(questionTypeTarget, () => {
   
   <FormBlock>
     <input
-      :value="props.question.title"
+    placeholder="Новый вопрос"
+      v-model="props.question.title"
       class="border-b-2 border-slate-200 w-full outline-0 text-xl p-2"
     />
 

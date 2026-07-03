@@ -14,7 +14,6 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
-  title: string;
   type: string;
 }>();
 

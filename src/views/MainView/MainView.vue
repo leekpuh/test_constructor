@@ -52,16 +52,16 @@ function handleCreateNewForm() {
       <div class="w-full h-full flex gap-6 flex-wrap pt-4">
         <div v-for="form in formsStore.forms">
           <div
-            class="border border-slate-300 hover:border-slate-400 hover:cursor-pointer rounded-b-lg"
+            class="border border-slate-300 rounded-b-lg"
           >
             <button
               @click="router.push(`/form/${form.id}`)"
-              class="border-b border-slate-300 w-40 h-30 flex-cente bg-white"
+              class="border-b border-slate-300 w-40 h-30 flex-cente bg-white hover:border hover:border-slate-400 hover:cursor-pointer"
             >
               <OhVueIcon name="fc-list" scale="2" class="text-slate-600" />
             </button>
             <div class="bg-blue-50 p-2 rounded-b-lg ">
-              <p class="text-sm mb-2">{{ form.title }}</p>
+              <p class="text-sm mb-2" :title="form.title">{{ form.title.length > 15 ? form.title.slice(0,15) + "..." : form.title}}</p>
               <div class="flex justify-between">
                 <div class="flex gap-1 items-center">
                   <OhVueIcon name="md-accesstime-round" scale="0.8" class="text-slate-600" />

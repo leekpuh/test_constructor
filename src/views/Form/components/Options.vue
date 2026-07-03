@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { useFormsStore, type IQuestionBlock } from "@/stores/forms";
+import { useFormsStore } from "@/stores/forms";
+import { type IQuestionBlock } from "@/types/forms";
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { HiSolidPlus } from "oh-vue-icons/icons";
 import { computed } from "vue";
