@@ -86,6 +86,7 @@ export const useFormsStore = defineStore("formsStore", () => {
     const newOption: IOption = {
       id: nanoid(),
       optionText: "",
+      rightAnswer: false
     };
 
     question?.options.push(newOption);

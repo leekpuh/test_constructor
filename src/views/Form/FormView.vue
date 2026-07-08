@@ -70,7 +70,7 @@ watchEffect(() => {
               <div
                 class="h-2 w-full bg-blue-100 flex-center p-2 cursor-pointer hover:bg-blue-200/75 rounded-t-2xl handle"
               >
-                <p class="text-slate-300">=</p>
+                <p class="text-slate-400/75">=</p>
               </div>
               <QuestionBlock
                 v-if="block.blockType === 'question'"

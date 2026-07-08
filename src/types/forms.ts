@@ -58,4 +58,5 @@ export type FormBlock =
 export interface IOption {
   id: string;
   optionText: string;
+  rightAnswer: boolean;
 }

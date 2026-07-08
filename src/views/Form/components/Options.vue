@@ -26,14 +26,15 @@ function handleAddOption(questionId: string) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
-    <input
-      v-for="o in options"
-      :key="o.id"
-      v-model="o.optionText"
-      placeholder="Вариант ответа"
-      class="border-b-2 border-slate-200 w-full outline-0 p-2"
-    />
+  <div class="flex flex-col gap-2" >
+    <div class="flex gap-4" v-for="o in options" :key="o.id">
+      <input
+        v-model="o.optionText"
+        placeholder="Вариант ответа"
+        class="border-b-2 border-slate-200 w-full outline-0 p-2"
+      />
+      <input v-model="o.rightAnswer" type="checkbox" class="size-5 cursor-pointer flex self-center" title="Пометить верный ответ"/>
+    </div>
   </div>
   <button
     @click="handleAddOption(props.questionId)"
